@@ -38,7 +38,7 @@ def generate_tweet(headlines):
     headlines_text = "\n".join(f"- {h}" for h in headlines)
     message = claude.messages.create(
         model="claude-sonnet-4-20250514",
-        max_tokens=400,
+        max_tokens=280,
         messages=[{
             "role": "user",
             "content": f"""You are a magazine-style viral news writer for X (Twitter).
