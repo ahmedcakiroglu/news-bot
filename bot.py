@@ -38,7 +38,7 @@ def generate_tweet(headlines):
     headlines_text = "\n".join(f"- {h}" for h in headlines)
     message = claude.messages.create(
         model="claude-sonnet-4-20250514",
-        max_tokens=280,
+        max_tokens=400,
         messages=[{
             "role": "user",
             "content": f"""You are a magazine-style viral news writer for X (Twitter).
@@ -69,8 +69,8 @@ def post_news_tweet():
         return
     print("Generating tweet...")
     tweet = generate_tweet(headlines)
-    if len(tweet) > 280:
-        tweet = tweet[:277] + "..."
+    if len(tweet) > 400:
+        tweet = tweet[:399] + "..."
     print(f"Posting: {tweet}")
     x_client.create_tweet(text=tweet)
     print("Done!")
