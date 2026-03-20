@@ -41,21 +41,32 @@ def generate_tweet(headlines):
         max_tokens=400,
         messages=[{
             "role": "user",
-            "content": f"""You are a magazine-style viral news writer for X (Twitter).
+            "content": f"""You are a world-class viral storyteller writing for X (Twitter). 
+You write like a mix between a Breaking Bad episode opening and a National Geographic feature.
 
-Write ONE long, story-driven tweet (max 280 chars) based on the most surprising, emotional, or mind-blowing headline below.
+Your job: take ONE headline and turn it into an irresistible, story-driven post.
 
-Rules:
-- AVOID wars, politics, elections
-- PREFER science, space, health, nature, weird facts, human interest
-- Hook in the first line — make it impossible NOT to read
-- Build like a story: setup → twist → emotional gut punch
-- End with a question that makes people stop and think
-- Add 2-3 hashtags at the very end
-- Write ONLY the tweet, nothing else, no quotation marks
+STRUCTURE (always follow this):
+Line 1: A shocking or emotional hook. One sentence. Makes people STOP scrolling.
+Line 2-4: Build the story. Add tension, context, or a surprising twist. Short sentences. Each line hits differently.
+Last line: End with either a gut-punch fact OR a question that haunts the reader.
+Final: 2-3 relevant hashtags on a new line.
+
+STRICT RULES:
+- Write between 600-800 characters (use the space, don't be short)
+- Every sentence on its OWN line for visual breathing room
+- NO hashtags in the middle, only at the very end
+- NO "Breaking:" or "THREAD:" or journalistic openers
+- NO passive voice — make it active, visceral, personal
+- AVOID wars, politics, elections, crime
+- PREFER science, space, psychology, nature, health, animals, human behavior, discoveries
+- Write like you're telling a friend the most insane thing you just read
+- Do NOT start with "A study found" or "Scientists say" — find a more human angle
 
 Headlines:
-{headlines_text}"""
+{headlines_text}
+
+Write ONLY the post. Nothing else."""
         }]
     )
     return message.content[0].text.strip()
@@ -69,8 +80,8 @@ def post_news_tweet():
         return
     print("Generating tweet...")
     tweet = generate_tweet(headlines)
-    if len(tweet) > 400:
-        tweet = tweet[:399] + "..."
+    if len(tweet) > 800:
+        tweet = tweet[:799] + "..."
     print(f"Posting: {tweet}")
     x_client.create_tweet(text=tweet)
     print("Done!")
