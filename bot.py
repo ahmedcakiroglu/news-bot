@@ -19,23 +19,18 @@ claude = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
 
 # --- Get News ---
 def get_news():
-    url = "https://newsapi.org/v2/top-headlines"
-    world = requests.get(url, params={
-        "apiKey": os.getenv("NEWS_API_KEY"),
-        "language": "en",
-        "pageSize": 5
-    }).json()
-    turkey = requests.get(url, params={
-        "apiKey": os.getenv("NEWS_API_KEY"),
-        "country": "tr",
-        "pageSize": 5
+    url = "https://gnews.io/api/v4/top-headlines"
+    response = requests.get(url, params={
+        "token": os.getenv("GNEWS_API_KEY"),
+        "lang": "en",
+        "max": 8
     }).json()
 
     articles = []
-    for a in world.get("articles", []) + turkey.get("articles", []):
+    for a in response.get("articles", []):
         if a.get("title") and a.get("description"):
             articles.append(f"{a['title']}: {a['description']}")
-    return articles[:6]
+    return articles[:8]
 
 # --- Generate Tweet ---
 def generate_tweet(headlines):
