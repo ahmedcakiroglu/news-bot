@@ -25,6 +25,7 @@ def get_news():
         "lang": "en",
         "max": 8
     }).json()
+    print("GNews response:", response)
 
     articles = []
     for a in response.get("articles", []):
