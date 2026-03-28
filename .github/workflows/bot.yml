@@ -2,6 +2,12 @@ name: News Tweet Bot
 
 on:
   schedule:
+    # Türkiye saati (UTC+3):
+    # 10:00 TR = 07:00 UTC  → Sabah
+    # 13:00 TR = 10:00 UTC  → Öğlen
+    # 16:00 TR = 13:00 UTC  → Öğleden sonra
+    # 19:00 TR = 16:00 UTC  → Akşamüstü
+    # 22:00 TR = 19:00 UTC  → Akşam (pik etkileşim)
     - cron: '0 7 * * *'
     - cron: '0 10 * * *'
     - cron: '0 13 * * *'
@@ -23,6 +29,15 @@ jobs:
       - name: Install packages
         run: pip install tweepy anthropic requests python-dotenv
 
+      # Keyword geçmişini önceki çalışmadan yükle
+      - name: Restore keyword history
+        uses: actions/cache/restore@v4
+        with:
+          path: used_keywords.json
+          key: keyword-history-${{ github.run_id }}
+          restore-keys: |
+            keyword-history-
+
       - name: Run bot
         env:
           PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
@@ -33,5 +48,13 @@ jobs:
           X_API_SECRET: ${{ secrets.X_API_SECRET }}
           X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}
           X_ACCESS_SECRET: ${{ secrets.X_ACCESS_SECRET }}
-          
+
         run: python bot.py
+
+      # Keyword geçmişini kaydet (görsel tekrarını önler)
+      - name: Save keyword history
+        uses: actions/cache/save@v4
+        if: always()
+        with:
+          path: used_keywords.json
+          key: keyword-history-${{ github.run_id }}
